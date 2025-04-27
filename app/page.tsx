@@ -1,103 +1,362 @@
-import Image from "next/image";
-
+"use client";
+import { useState } from "react";
+import CallToAction from "@/components/call-to-action";
+import ContentSection from "@/components/content-7";
+import FAQsThree from "@/components/faqs-3";
+import Features from "@/components/features-1";
+import FooterSection from "@/components/footer";
+import HeroSection from "@/components/hero-section";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [lostDialogOpen, setLostDialogOpen] = useState(false);
+  const [foundDialogOpen, setFoundDialogOpen] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  // State for form data
+  const [lostFormData, setLostFormData] = useState({
+    name: "",
+    contact: "",
+    documentType: "",
+    lastSeen: "",
+    description: "",
+  });
+
+  const [foundFormData, setFoundFormData] = useState({
+    name: "",
+    contact: "",
+    documentType: "",
+    whereFound: "",
+    description: "",
+  });
+  const handleLostInputChange = (e) => {
+    const { name, value } = e.target;
+    setLostFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle found form input changes
+  const handleFoundInputChange = (e) => {
+    const { name, value } = e.target;
+    setFoundFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Function to handle report lost form submission
+  const handleReportLostSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Here you would typically send this data to your API
+      console.log("Submitting lost document report:", lostFormData);
+
+      // Mock API call
+      // const response = await fetch('/api/report-lost', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(lostFormData)
+      // });
+
+      // Reset form data
+      setLostFormData({
+        name: "",
+        contact: "",
+        documentType: "",
+        lastSeen: "",
+        description: "",
+      });
+
+      // Close dialog
+      setLostDialogOpen(false);
+
+      // Show success message (you could use a toast notification here)
+      toast.success("Lost document reported successfully!");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Error submitting form. Please try again.");
+    }
+  };
+
+  // Function to handle report found form submission
+  const handleReportFoundSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Here you would typically send this data to your API
+      console.log("Submitting found document report:", foundFormData);
+
+      // Mock API call
+      // const response = await fetch('/api/report-found', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(foundFormData)
+      // });
+
+      // Reset form data
+      setFoundFormData({
+        name: "",
+        contact: "",
+        documentType: "",
+        whereFound: "",
+        description: "",
+      });
+
+      // Close dialog
+      setFoundDialogOpen(false);
+
+      // Show success message (you could use a toast notification here)
+      toast.success("Found document reported successfully!");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Error submitting form. Please try again.");
+    }
+  };
+
+  return (
+    <>
+      {/* Pass function to handle dialog for lost form   as prop */}
+      <HeroSection
+        reportLostHandler={() => setLostDialogOpen(true)}
+        reportFoundHandler={() => setFoundDialogOpen(true)}
+      />
+      ;
+      <Features />
+      <ContentSection />
+      <CallToAction />
+      <FAQsThree />
+      <FooterSection />
+      {/* Report Found Document Form */}
+      <Dialog open={lostDialogOpen} onOpenChange={setLostDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Report Lost Document</DialogTitle>
+            <DialogDescription>
+              Fill out this form to report your lost document. We will help you
+              find it.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleReportLostSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lost-name" className="text-left">
+                  Name
+                </Label>
+                <Input
+                  id="lost-name"
+                  name="name"
+                  value={lostFormData.name}
+                  onChange={handleLostInputChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lost-contact" className="text-left">
+                  Contact
+                </Label>
+                <Input
+                  id="lost-contact"
+                  name="contact"
+                  value={lostFormData.contact}
+                  onChange={handleLostInputChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lost-document-type" className="text-left">
+                  Document Type
+                </Label>
+                <div className="col-span-3">
+                  <Select
+                    name="documentType"
+                    value={lostFormData.documentType}
+                    onValueChange={(value) =>
+                      setLostFormData((prev) => ({
+                        ...prev,
+                        documentType: value,
+                      }))
+                    }
+                    required
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select document type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="NationalID">National ID</SelectItem>
+                      <SelectItem value="TitleDeed">Title Deed</SelectItem>
+                      <SelectItem value="EducationalCertificate">
+                        Educational Certificate
+                      </SelectItem>
+                      <SelectItem value="DriverLicense">
+                        Driver License
+                      </SelectItem>
+                      <SelectItem value="Passport">Passport</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lost-last-seen" className="text-left">
+                  Last Seen
+                </Label>
+                <Input
+                  id="lost-last-seen"
+                  name="lastSeen"
+                  value={lostFormData.lastSeen}
+                  onChange={handleLostInputChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="lost-description" className="text-left">
+                  Description
+                </Label>
+                <Textarea
+                  id="lost-description"
+                  name="description"
+                  value={lostFormData.description}
+                  onChange={handleLostInputChange}
+                  className="col-span-3"
+                  rows={3}
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Submit Report</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+      {/* Report Found Document Form Dialog */}
+      <Dialog open={foundDialogOpen} onOpenChange={setFoundDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Report Found Document</DialogTitle>
+            <DialogDescription>
+              Help reunite someone with their lost document by filling out this
+              form.
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleReportFoundSubmit}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="found-name" className="text-left">
+                  Your Name
+                </Label>
+                <Input
+                  id="found-name"
+                  name="name"
+                  value={foundFormData.name}
+                  onChange={handleFoundInputChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="found-contact" className="text-left">
+                  Contact
+                </Label>
+                <Input
+                  id="found-contact"
+                  name="contact"
+                  value={foundFormData.contact}
+                  onChange={handleFoundInputChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="found-document-type" className="text-left">
+                  Document Type
+                </Label>
+                <div className="col-span-3">
+                  <Select
+                    name="documentType"
+                    value={foundFormData.documentType}
+                    onValueChange={(value) =>
+                      setFoundFormData((prev) => ({
+                        ...prev,
+                        documentType: value,
+                      }))
+                    }
+                    required
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select document type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="NationalID">National ID</SelectItem>
+                      <SelectItem value="TitleDeed">Title Deed</SelectItem>
+                      <SelectItem value="EducationalCertificate">
+                        Educational Certificate
+                      </SelectItem>
+                      <SelectItem value="DriverLicense">
+                        Driver License
+                      </SelectItem>
+                      <SelectItem value="Passport">Passport</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="found-where" className="text-left">
+                  Where Found
+                </Label>
+                <Input
+                  id="found-where"
+                  name="whereFound"
+                  value={foundFormData.whereFound}
+                  onChange={handleFoundInputChange}
+                  className="col-span-3"
+                  required
+                />
+              </div>
+              {/* Image upload */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="found-description" className="text-left">
+                  Description
+                </Label>
+                <Textarea
+                  id="found-description"
+                  name="description"
+                  value={foundFormData.description}
+                  onChange={handleFoundInputChange}
+                  className="col-span-3"
+                  rows={3}
+                  required
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Submit Report</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
