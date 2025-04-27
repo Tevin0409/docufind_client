@@ -143,7 +143,10 @@ export default function Home() {
       ;
       <Features />
       <ContentSection />
-      <CallToAction />
+      <CallToAction
+        reportLostHandler={() => setLostDialogOpen(true)}
+        reportFoundHandler={() => setFoundDialogOpen(true)}
+      />
       <FAQsThree />
       <FooterSection />
       {/* Report Found Document Form */}

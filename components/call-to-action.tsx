@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
-export default function CallToAction() {
+interface CTAProps {
+  reportLostHandler: () => void;
+  reportFoundHandler: () => void;
+}
+export default function CallToAction(props: CTAProps) {
+  const { reportLostHandler, reportFoundHandler } = props;
   return (
     <section className="py-16 md:py-32">
       <div className="mx-auto max-w-5xl px-6">
@@ -15,16 +19,17 @@ export default function CallToAction() {
           </p>
 
           <div className="mt-12 flex flex-wrap justify-center gap-4">
-            <Button asChild size="lg">
-              <Link href="/find-my-documents">
-                <span>Find My Documents</span>
-              </Link>
+            <Button asChild size="lg" onClick={reportLostHandler}>
+              <span>Find My Documents</span>
             </Button>
 
-            <Button asChild size="lg" variant="outline">
-              <Link href="/report-found-documents">
-                <span>Report Found Documents</span>
-              </Link>
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              onClick={reportFoundHandler}
+            >
+              <span>Report Found Documents</span>
             </Button>
           </div>
         </div>
