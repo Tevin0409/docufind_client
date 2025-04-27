@@ -25,6 +25,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { UploadDropzone } from "@/utils/uploadthing";
+import { Trash2 } from "lucide-react";
 
 export default function Home() {
   const [lostDialogOpen, setLostDialogOpen] = useState(false);
@@ -45,6 +47,7 @@ export default function Home() {
     documentType: "",
     whereFound: "",
     description: "",
+    image: "",
   });
   const handleLostInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -120,6 +123,7 @@ export default function Home() {
         documentType: "",
         whereFound: "",
         description: "",
+        image: "",
       });
 
       // Close dialog
@@ -131,6 +135,25 @@ export default function Home() {
       console.error("Error submitting form:", error);
       toast.error("Error submitting form. Please try again.");
     }
+  };
+
+  const isFoundFormValid = () => {
+    return (
+      foundFormData.name !== "" &&
+      foundFormData.contact !== "" &&
+      foundFormData.documentType !== "" &&
+      foundFormData.whereFound !== "" &&
+      foundFormData.image !== ""
+    );
+  };
+
+  const isLostFormValid = () => {
+    return (
+      lostFormData.name !== "" &&
+      lostFormData.contact !== "" &&
+      lostFormData.documentType !== "" &&
+      lostFormData.lastSeen !== ""
+    );
   };
 
   return (
@@ -235,7 +258,9 @@ export default function Home() {
               </div>
             </div>
             <DialogFooter>
-              <Button type="submit">Submit Report</Button>
+              <Button type="submit" disabled={!isLostFormValid()}>
+                Submit Report
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
@@ -325,23 +350,60 @@ export default function Home() {
                 />
               </div>
               {/* Image upload */}
-              {/* <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="found-description" className="text-left">
-                  Description
-                </Label>
-                <Textarea
-                  id="found-description"
-                  name="description"
-                  value={foundFormData.description}
-                  onChange={handleFoundInputChange}
-                  className="col-span-3"
-                  rows={3}
-                  required
+              {(foundFormData.image === "" ||
+                foundFormData.image === undefined ||
+                foundFormData.image === null) && (
+                <UploadDropzone
+                  endpoint={"imageUploader"}
+                  onClientUploadComplete={(data) => {
+                    setFoundFormData((prev) => ({
+                      ...prev,
+                      image: data[0].ufsUrl as string,
+                    }));
+                  }}
+                  onUploadError={(error: Error) => {
+                    // Do something with the error.
+                    toast.error(error.message);
+                  }}
                 />
-              </div> */}
+              )}
+
+              {foundFormData.image !== "" && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="found-description" className="text-left">
+                    Image URL
+                  </Label>
+                  <div className="col-span-3 flex items-center gap-2">
+                    <Input
+                      id="found-image"
+                      name="image"
+                      value={foundFormData.image}
+                      onChange={handleFoundInputChange}
+                      className="flex-1"
+                      disabled
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={() => {
+                        setFoundFormData((prev) => ({
+                          ...prev,
+                          image: "",
+                        }));
+                      }}
+                      aria-label="Remove image"
+                    >
+                      <Trash2 size={16} />
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
             <DialogFooter>
-              <Button type="submit">Submit Report</Button>
+              <Button type="submit" disabled={!isFoundFormValid()}>
+                Submit Report
+              </Button>
             </DialogFooter>
           </form>
         </DialogContent>
