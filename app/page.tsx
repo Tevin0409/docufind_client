@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import CallToAction from "@/components/call-to-action";
 import ContentSection from "@/components/content-7";
 import FAQsThree from "@/components/faqs-3";
@@ -25,7 +25,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+
 export default function Home() {
   const [lostDialogOpen, setLostDialogOpen] = useState(false);
   const [foundDialogOpen, setFoundDialogOpen] = useState(false);
@@ -46,7 +46,7 @@ export default function Home() {
     whereFound: "",
     description: "",
   });
-  const handleLostInputChange = (e) => {
+  const handleLostInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setLostFormData((prev) => ({
       ...prev,
@@ -55,7 +55,7 @@ export default function Home() {
   };
 
   // Handle found form input changes
-  const handleFoundInputChange = (e) => {
+  const handleFoundInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFoundFormData((prev) => ({
       ...prev,
@@ -64,7 +64,7 @@ export default function Home() {
   };
 
   // Function to handle report lost form submission
-  const handleReportLostSubmit = async (e) => {
+  const handleReportLostSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -99,7 +99,7 @@ export default function Home() {
   };
 
   // Function to handle report found form submission
-  const handleReportFoundSubmit = async (e) => {
+  const handleReportFoundSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -230,20 +230,6 @@ export default function Home() {
                   required
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="lost-description" className="text-left">
-                  Description
-                </Label>
-                <Textarea
-                  id="lost-description"
-                  name="description"
-                  value={lostFormData.description}
-                  onChange={handleLostInputChange}
-                  className="col-span-3"
-                  rows={3}
-                  required
-                />
-              </div>
             </div>
             <DialogFooter>
               <Button type="submit">Submit Report</Button>
@@ -336,7 +322,7 @@ export default function Home() {
                 />
               </div>
               {/* Image upload */}
-              <div className="grid grid-cols-4 items-center gap-4">
+              {/* <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="found-description" className="text-left">
                   Description
                 </Label>
@@ -349,7 +335,7 @@ export default function Home() {
                   rows={3}
                   required
                 />
-              </div>
+              </div> */}
             </div>
             <DialogFooter>
               <Button type="submit">Submit Report</Button>
