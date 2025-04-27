@@ -15,7 +15,7 @@ export default function HeroSection(props: HeroSectionProps) {
   const { reportLostHandler, reportFoundHandler } = props;
   return (
     <>
-      <HeroHeader />
+      <HeroHeader reportLostHandler={reportLostHandler} />
       <main className="overflow-x-hidden">
         <section>
           <div className="pb-24 pt-12 md:pb-32 lg:pb-56 lg:pt-44">

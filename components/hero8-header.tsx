@@ -12,8 +12,13 @@ const menuItems = [
   { name: "About", href: "#link" },
 ];
 
-export const HeroHeader = () => {
+export const HeroHeader = (
+  props: React.PropsWithChildren<{
+    reportLostHandler: () => void;
+  }>
+) => {
   const [menuState, setMenuState] = React.useState(false);
+  const { reportLostHandler } = props;
   return (
     <header>
       <nav
@@ -77,10 +82,8 @@ export const HeroHeader = () => {
                     <span>Login</span>
                   </Link>
                 </Button>
-                <Button asChild size="sm">
-                  <Link href="#">
-                    <span>Lost a document?</span>
-                  </Link>
+                <Button asChild size="sm" onClick={reportLostHandler}>
+                  <span>Lost a document?</span>
                 </Button>
               </div>
             </div>
